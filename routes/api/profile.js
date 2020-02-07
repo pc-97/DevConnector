@@ -6,6 +6,7 @@ const Profile = require("../../models/Profile");
 const { check, validationResult } = require("express-validator");
 const request = require("request");
 const config = require("config");
+const Post = require("../../models/Post");
 
 // @route  GET api/profile/me
 // @desc Get my profile
@@ -148,6 +149,7 @@ router.get("/user/:user_id", async (req, res) => {
 // @access private
 router.delete("/", [auth], async (req, res) => {
   try {
+    await Post.deleteMany({ user: req.user.id });
     await Profile.findOneAndRemove({ user: req.user.id });
     await User.findOneAndRemove({ _id: req.user.id });
 
@@ -204,6 +206,7 @@ router.put(
     };
 
     try {
+      console.log("*** to is *** " + to);
       const profile = await Profile.findOne({ user: req.user.id });
       profile.experience.unshift(newExp);
       await profile.save();
