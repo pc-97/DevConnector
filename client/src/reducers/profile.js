@@ -32,8 +32,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        error: payload,
-        profile: null
+        error: payload
       };
 
     case CLEAR_PROFILE:
